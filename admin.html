@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FoodCal Admin</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    /* ── Login ── */
+    #login {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 16px;
+    }
+
+    #login h1 { font-size: 24px; font-weight: 600; }
+
+    #login input {
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid #2d3748;
+      background: #1a1f2e;
+      color: #e2e8f0;
+      font-size: 16px;
+      width: 280px;
+      outline: none;
+    }
+
+    #login input:focus { border-color: #4f8ef7; }
+
+    #login button {
+      padding: 12px 32px;
+      border-radius: 10px;
+      border: none;
+      background: #4f8ef7;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 280px;
+    }
+
+    #login button:hover { background: #3b7de0; }
+    #login .error { color: #fc8181; font-size: 14px; }
+
+    /* ── Dashboard ── */
+    #dashboard { display: none; padding: 32px; max-width: 1100px; margin: 0 auto; }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+
+    header h1 { font-size: 22px; font-weight: 700; }
+
+    .controls { display: flex; gap: 12px; align-items: center; }
+
+    .controls select {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #2d3748;
+      background: #1a1f2e;
+      color: #e2e8f0;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .controls button {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      background: #4f8ef7;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .controls button:hover { background: #3b7de0; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .card {
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .card.wide { grid-column: 1 / -1; }
+
+    .card h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+    }
+
+    .card canvas { max-height: 260px; }
+    .card.wide canvas { max-height: 300px; }
+
+    .cohort-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .cohort-table th {
+      text-align: left;
+      padding: 8px 12px;
+      color: #64748b;
+      border-bottom: 1px solid #2d3748;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .cohort-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #1e2535;
+      white-space: nowrap;
+    }
+    .cohort-table tr:last-child td { border-bottom: none; }
+    .cohort-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .pct-cell { font-weight: 600; }
+    .pct-high  { color: #34d399; }
+    .pct-mid   { color: #fbbf24; }
+    .pct-low   { color: #f87171; }
+    .pct-zero  { color: #475569; }
+
+    .stat-row {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .stat {
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 12px;
+      padding: 20px 24px;
+      flex: 1;
+    }
+
+    .stat .label { font-size: 13px; color: #64748b; margin-bottom: 6px; }
+    .stat .value { font-size: 32px; font-weight: 700; }
+
+    #loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 200px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login -->
+<section id="login">
+  <h1>FoodCal Admin</h1>
+  <input id="secret-input" type="password" placeholder="Admin secret" />
+  <button id="login-btn">Войти</button>
+  <p class="error" id="login-error"></p>
+</section>
+
+<!-- Dashboard -->
+<section id="dashboard">
+  <header>
+    <h1>FoodCal Analytics</h1>
+    <div class="controls">
+      <select id="days-select">
+        <option value="14">14 дней</option>
+        <option value="30" selected>30 дней</option>
+        <option value="60">60 дней</option>
+        <option value="90">90 дней</option>
+      </select>
+      <button id="refresh-btn">Обновить</button>
+    </div>
+  </header>
+
+  <div id="loading">Загрузка...</div>
+
+  <div id="content" style="display:none">
+    <div class="stat-row">
+      <div class="stat">
+        <div class="label">Всего пользователей (период)</div>
+        <div class="value" id="stat-users">—</div>
+      </div>
+      <div class="stat">
+        <div class="label">Распознаваний фото (период)</div>
+        <div class="value" id="stat-recognitions">—</div>
+      </div>
+      <div class="stat">
+        <div class="label">Распознаваний текст (период)</div>
+        <div class="value" id="stat-recognitions-text">—</div>
+      </div>
+      <div class="stat">
+        <div class="label">Ретеншн день 1</div>
+        <div class="value" id="stat-retention">—</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Новые пользователи / день</h2>
+        <canvas id="chart-users"></canvas>
+      </div>
+      <div class="card">
+        <h2>Распознавания / день</h2>
+        <canvas id="chart-recognitions"></canvas>
+      </div>
+      <div class="card wide">
+        <h2>Ретеншн пользователей (дни 0–14)</h2>
+        <canvas id="chart-retention"></canvas>
+      </div>
+      <div class="card wide">
+        <h2>Когортный ретеншн по дням регистрации</h2>
+        <div id="cohort-table-wrap"></div>
+      </div>
+      <div class="card wide">
+        <h2>Активность за вчера и сегодня (зарегистрированные до позавчера)</h2>
+        <div id="recent-activity-wrap"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const FUNCTION_URL = 'https://mveurfdckrdfmxgdvjdw.supabase.co/functions/v1/admin-stats';
+
+  let secret = '';
+  let charts = {};
+
+  // ── Login ────────────────────────────────────────────
+  document.getElementById('login-btn').addEventListener('click', async () => {
+    secret = document.getElementById('secret-input').value.trim();
+    if (!secret) return;
+    const ok = await loadData();
+    if (ok) {
+      document.getElementById('login').style.display    = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+    } else {
+      document.getElementById('login-error').textContent = 'Неверный секрет или ошибка сервера';
+    }
+  });
+
+  document.getElementById('secret-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('login-btn').click();
+  });
+
+  document.getElementById('refresh-btn').addEventListener('click', loadData);
+  document.getElementById('days-select').addEventListener('change', loadData);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && secret) loadData();
+  });
+
+  // ── Data fetching ────────────────────────────────────
+  async function loadData() {
+    const days = document.getElementById('days-select')?.value ?? 30;
+    document.getElementById('loading').style.display  = 'flex';
+    document.getElementById('content').style.display  = 'none';
+
+    try {
+      const ANON_KEY = 'sb_publishable_9S4_dvEERlG26_tVuoleYw_yZ3wfwXi';
+      const res = await fetch(`${FUNCTION_URL}?days=${days}&min_users=1`, {
+        headers: { 'x-admin-secret': secret, 'apikey': ANON_KEY },
+      });
+
+      if (!res.ok) return false;
+
+      const data = await res.json();
+      renderStats(data);
+      renderCharts(data);
+      renderCohortTable(data.cohorts);
+      renderRecentActivity(data.recentActivity);
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('content').style.display = 'block';
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  // ── Summary stats ────────────────────────────────────
+  function renderStats({ users, recognitions, textRecognitions, retention }) {
+    const totalUsers             = users.reduce((s, r) => s + Number(r.new_users), 0);
+    const totalRecognitions      = recognitions.reduce((s, r) => s + Number(r.recognitions), 0);
+    const totalTextRecognitions  = (textRecognitions ?? []).reduce((s, r) => s + Number(r.recognitions), 0);
+    const day1                   = retention.find(r => r.day_n === 1);
+
+    document.getElementById('stat-users').textContent               = totalUsers;
+    document.getElementById('stat-recognitions').textContent        = totalRecognitions;
+    document.getElementById('stat-recognitions-text').textContent   = totalTextRecognitions;
+    document.getElementById('stat-retention').textContent           = day1 ? `${day1.retention_pct}%` : '—';
+  }
+
+  // ── Charts ───────────────────────────────────────────
+  const BLUE   = 'rgba(79, 142, 247, 0.85)';
+  const GREEN  = 'rgba(52, 211, 153, 0.85)';
+  const ORANGE = 'rgba(251, 146, 60, 0.85)';
+  const BLUE_A = 'rgba(79, 142, 247, 0.15)';
+  const GREEN_A= 'rgba(52, 211, 153, 0.15)';
+
+  const gridColor = 'rgba(255,255,255,0.06)';
+  const tickColor = '#64748b';
+
+  const baseScales = {
+    x: { grid: { color: gridColor }, ticks: { color: tickColor } },
+    y: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: true },
+  };
+
+  function mkChart(id, config) {
+    if (charts[id]) charts[id].destroy();
+    charts[id] = new Chart(document.getElementById(id), config);
+  }
+
+  function fmt(dateStr) {
+    const d = new Date(dateStr);
+    return `${d.getDate()}.${String(d.getMonth()+1).padStart(2,'0')}`;
+  }
+
+  function pctClass(v) {
+    if (v === null || v === undefined) return 'pct-zero';
+    if (v >= 50) return 'pct-high';
+    if (v >= 20) return 'pct-mid';
+    if (v > 0)   return 'pct-low';
+    return 'pct-zero';
+  }
+
+  function pctCell(v) {
+    if (v === null || v === undefined) return '<td class="pct-cell pct-zero">—</td>';
+    return `<td class="pct-cell ${pctClass(v)}">${v}%</td>`;
+  }
+
+  function renderCohortTable(cohorts) {
+    if (!cohorts || cohorts.length === 0) {
+      document.getElementById('cohort-table-wrap').innerHTML =
+        '<p style="color:#475569;font-size:13px">Нет данных</p>';
+      return;
+    }
+    const rows = cohorts.map(r => `
+      <tr>
+        <td>${r.cohort_day}</td>
+        <td>${r.cohort_size}</td>
+        ${pctCell(r.day0_pct)}
+        ${pctCell(r.day1_pct)}
+        ${pctCell(r.day3_pct)}
+        ${pctCell(r.day7_pct)}
+      </tr>`).join('');
+
+    document.getElementById('cohort-table-wrap').innerHTML = `
+      <table class="cohort-table">
+        <thead>
+          <tr>
+            <th>Дата регистрации</th>
+            <th>Кол-во users</th>
+            <th>День 0 (activation)</th>
+            <th>День 1</th>
+            <th>День 3</th>
+            <th>День 7</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  }
+
+  function mergeByDate(photoData, textData) {
+    const allDates = [...new Set([...(photoData ?? []).map(r => r.day), ...(textData ?? []).map(r => r.day)])].sort();
+    const photoMap = Object.fromEntries((photoData ?? []).map(r => [r.day, Number(r.recognitions)]));
+    const textMap  = Object.fromEntries((textData  ?? []).map(r => [r.day, Number(r.recognitions)]));
+    return {
+      labels: allDates.map(fmt),
+      photo:  allDates.map(d => photoMap[d] ?? 0),
+      text:   allDates.map(d => textMap[d]  ?? 0),
+    };
+  }
+
+  function fmtDate(dateStr) {
+    if (!dateStr) return '—';
+    const d = new Date(dateStr);
+    return `${d.getDate()}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
+  }
+
+  function renderRecentActivity(data) {
+    const wrap = document.getElementById('recent-activity-wrap');
+    if (!data) { wrap.innerHTML = '<p style="color:#475569;font-size:13px">Нет данных</p>'; return; }
+    wrap.innerHTML = `
+      <div class="stat-row" style="margin-bottom:0">
+        <div class="stat">
+          <div class="label">Зарегистрировано до ${fmtDate(data.cutoff_date)} включительно</div>
+          <div class="value">${data.total_registered}</div>
+        </div>
+        <div class="stat">
+          <div class="label">Использовали вчера (${fmtDate(data.yesterday)})</div>
+          <div class="value">${data.users_yesterday}</div>
+        </div>
+        <div class="stat">
+          <div class="label">Использовали сегодня (${fmtDate(data.today)})</div>
+          <div class="value">${data.users_today}</div>
+        </div>
+        <div class="stat">
+          <div class="label">Оба дня</div>
+          <div class="value">${data.users_both_days}</div>
+        </div>
+      </div>`;
+  }
+
+  function renderCharts({ users, recognitions, textRecognitions, retention }) {
+    // New users
+    mkChart('chart-users', {
+      type: 'bar',
+      data: {
+        labels:   users.map(r => fmt(r.day)),
+        datasets: [{ label: 'Новые пользователи', data: users.map(r => r.new_users),
+          backgroundColor: BLUE, borderRadius: 4 }],
+      },
+      options: { plugins: { legend: { display: false } }, scales: baseScales },
+    });
+
+    // Recognitions (photo + text stacked)
+    const merged = mergeByDate(recognitions, textRecognitions);
+    mkChart('chart-recognitions', {
+      type: 'bar',
+      data: {
+        labels:   merged.labels,
+        datasets: [
+          { label: 'Фото',  data: merged.photo, backgroundColor: GREEN,  borderRadius: 4, stack: 'r' },
+          { label: 'Текст', data: merged.text,  backgroundColor: ORANGE, borderRadius: 4, stack: 'r' },
+        ],
+      },
+      options: {
+        plugins: { legend: { labels: { color: '#94a3b8' } } },
+        scales: {
+          x: { ...baseScales.x, stacked: true },
+          y: { ...baseScales.y, stacked: true },
+        },
+      },
+    });
+
+    // Retention
+    mkChart('chart-retention', {
+      type: 'line',
+      data: {
+        labels:   retention.map(r => `День ${r.day_n}`),
+        datasets: [
+          {
+            label: 'Обычный (точный день)',
+            data:  retention.map(r => r.retention_pct),
+            borderColor: BLUE, backgroundColor: BLUE_A,
+            fill: true, tension: 0.3, pointRadius: 4,
+          },
+          {
+            label: 'Кумулятивный (хоть раз за N дней)',
+            data:  retention.map(r => r.cumulative_pct),
+            borderColor: ORANGE, backgroundColor: 'rgba(251,146,60,0.10)',
+            fill: true, tension: 0.3, pointRadius: 4,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: { labels: { color: '#94a3b8' } },
+        },
+        scales: {
+          ...baseScales,
+          y: { ...baseScales.y, max: 100, ticks: { ...baseScales.y.ticks, callback: v => v + '%' } },
+        },
+      },
+    });
+  }
+</script>
+</body>
+</html>

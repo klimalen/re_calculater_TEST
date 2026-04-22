@@ -1,0 +1,16 @@
+{
+  "name": "Re Food Calculator",
+  "short_name": "Re Food Cal",
+  "description": "Считай калории просто! Узнай калории по фото или тексту за секунды — AI распознает еду и посчитает КБЖУ. Самый удобный счетчик и дневник питания.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#faf4e4",
+  "background_color": "#faf4e4",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "categories": ["health", "food"],
+  "lang": "ru"
+}
