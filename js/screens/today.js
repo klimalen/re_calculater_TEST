@@ -267,13 +267,25 @@ function _renderMealsList(meals, userId, dateStr, profile) {
   area.appendChild(header);
 
   if (!meals.length) {
+    const isNewUser = localStorage.getItem(`has_meal_${userId}`) !== '1';
     const empty = document.createElement('div');
     empty.className = 'empty-state';
-    empty.style.padding = '24px 16px';
-    empty.innerHTML = `
-      <div class="empty-state__title" style="margin-top:0">Пока ничего нет</div>
-      <button class="btn btn--primary" style="margin-top:8px" id="empty-add-btn">Добавить еду</button>
-    `;
+
+    if (isNewUser) {
+      empty.style.padding = '32px 16px';
+      empty.innerHTML = `
+        <div class="empty-state__title" style="margin-top:0">Добавь первый приём пищи</div>
+        <div class="empty-state__text">Опиши что ты съел — текстом или фото — и AI рассчитает КБЖУ за секунды</div>
+        <button class="btn btn--primary btn--full" style="margin-top:20px" id="empty-add-btn">Добавить еду</button>
+      `;
+    } else {
+      empty.style.padding = '24px 16px';
+      empty.innerHTML = `
+        <div class="empty-state__title" style="margin-top:0">Пока ничего нет</div>
+        <button class="btn btn--primary" style="margin-top:8px" id="empty-add-btn">Добавить еду</button>
+      `;
+    }
+
     area.appendChild(empty);
     area.querySelector('#empty-add-btn')?.addEventListener('click', () => navigate('add-meal'));
     return;

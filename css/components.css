@@ -1184,6 +1184,14 @@
   background: var(--border);
 }
 
+.add-meal__hint {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.5;
+  padding: 12px 8px 4px;
+}
+
 /* ── Onboarding full-screen slides ───────────────────── */
 
 .onboarding-v2 {

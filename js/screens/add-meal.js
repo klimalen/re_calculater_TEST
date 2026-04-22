@@ -1,7 +1,7 @@
 import { navigate } from '../router.js';
 import { hideBottomNav } from '../components/bottom-nav.js';
 import { compressImage } from '../lib/image.js';
-import { saveDraft } from '../state.js';
+import { saveDraft, getState } from '../state.js';
 import { toast } from '../components/toast.js';
 import { track, Events } from '../lib/analytics.js';
 
@@ -65,6 +65,14 @@ export function renderAddMeal() {
   `;
 
   app.querySelector('.js-back').addEventListener('click', () => navigate('today'));
+
+  const { user } = getState();
+  if (user && localStorage.getItem(`has_meal_${user.id}`) !== '1') {
+    const hint = document.createElement('div');
+    hint.className = 'add-meal__hint';
+    hint.textContent = 'Опиши что ты съел — текстом или фото — и AI рассчитает КБЖУ за секунды';
+    app.querySelector('.add-meal__methods').insertAdjacentElement('afterend', hint);
+  }
 
   const inputCamera  = document.getElementById('photo-input-camera');
   const inputGallery = document.getElementById('photo-input-gallery');
