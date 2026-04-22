@@ -351,6 +351,7 @@ async function _dismissBanner(userId, bannerId, lsKey) {
 }
 
 async function _renderHabitsBanner(area, userId) {
+  return; // hidden
   if (!userId) return;
 
   // Only show banner after user has added at least one meal
