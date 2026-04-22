@@ -60,6 +60,12 @@ export async function renderAiResult() {
   let items = [];
   let selectedMealType = _guessMealType();
   let isSaving = false;
+  let _tipsTimers = [];
+
+  function _clearTips() {
+    _tipsTimers.forEach(id => { clearTimeout(id); clearInterval(id); });
+    _tipsTimers = [];
+  }
 
   // ── Layout ──────────────────────────────────────────
   app.innerHTML = `
@@ -124,18 +130,42 @@ export async function renderAiResult() {
 
   // ── Render: loading ──────────────────────────────────
   function _showLoading(source) {
+    _clearTips();
     const body = document.getElementById('result-body');
     body.innerHTML = `
       <div class="ai-processing">
         <div class="ai-processing__spinner"></div>
         <div class="ai-processing__title">AI анализирует ${source === 'photo' ? 'фото' : 'описание'}…</div>
         <div class="ai-processing__text">Обычно это занимает 5–15 секунд, но при нестабильном интернет-соединении может занять больше времени</div>
+        <div class="ai-processing__tip" id="ai-tip"></div>
       </div>
     `;
+
+    const tipEl = document.getElementById('ai-tip');
+    const shuffled = _shuffleTips();
+    let idx = 0;
+
+    function showNext() {
+      tipEl.classList.remove('ai-processing__tip--visible');
+      const t = setTimeout(() => {
+        tipEl.textContent = shuffled[idx % shuffled.length];
+        tipEl.classList.add('ai-processing__tip--visible');
+        idx++;
+      }, 350);
+      _tipsTimers.push(t);
+    }
+
+    const firstTimer = setTimeout(() => {
+      showNext();
+      const interval = setInterval(showNext, 4500);
+      _tipsTimers.push(interval);
+    }, 3000);
+    _tipsTimers.push(firstTimer);
   }
 
   // ── Render: no food found ────────────────────────────
   function _renderNoFood(notes) {
+    _clearTips();
     const body = document.getElementById('result-body');
     body.innerHTML = `
       <div class="empty-state">
@@ -154,6 +184,7 @@ export async function renderAiResult() {
 
   // ── Render: error ────────────────────────────────────
   function _renderError(err) {
+    _clearTips();
     const body = document.getElementById('result-body');
     const isRateLimit = err.code === 'RATE_LIMIT';
     const isConcurrent = err.code === 'CONCURRENT';
@@ -178,6 +209,7 @@ export async function renderAiResult() {
 
   // ── Render: result ───────────────────────────────────
   function _renderResult(confidence, notes) {
+    _clearTips();
     const body = document.getElementById('result-body');
     const isLowConfidence = confidence < 0.5;
 
