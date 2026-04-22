@@ -62,10 +62,7 @@ export function renderWelcome() {
 
         <div class="bento-bottom">
           <div class="bento-card bento-tagline">
-            <span class="bento-tagline__title">Следи за прогрессом с помощью аналитики</span>
-          </div>
-          <div class="bento-card bento-food">
-            <img src="photo/1.jpeg" alt="">
+            <span class="bento-tagline__title">Следи<br>за прогрессом<br>с помощью<br>аналитики</span>
           </div>
           <button class="bento-card bento-cta js-register">
             Начать →
