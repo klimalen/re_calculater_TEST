@@ -827,6 +827,20 @@
   color: var(--text-secondary);
 }
 
+.ai-processing__tip {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-style: italic;
+  min-height: 3.5em;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  padding: 0 var(--space-4);
+}
+
+.ai-processing__tip--visible {
+  opacity: 1;
+}
+
 /* ── Animations ──────────────────────────────────────── */
 
 @keyframes spin {
