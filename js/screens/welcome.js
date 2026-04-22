@@ -34,7 +34,7 @@ export function renderWelcome() {
         <div class="bento-grid">
 
           <div class="bento-card bento-hero">
-            <p class="bento-hero__title">Следить за калориями еще никогда не было так просто!</p>
+            <p class="bento-hero__title">Следить за калориями просто!</p>
             <p class="bento-hero__sub">Сфотографируй или опиши еду — приложение само рассчитает КБЖУ</p>
           </div>
 
@@ -54,15 +54,15 @@ export function renderWelcome() {
             <img src="screens/5.png" alt="">
           </div>
           <div class="bento-card bento-analytics">
-            <span class="bento-analytics__text">Следи за прогрессом с помощью аналитики</span>
+            <span class="bento-analytics__title">Весь рацион —<br>как на ладони</span>
+            <span class="bento-analytics__sub">КБЖУ, динамика, цели по калориям</span>
           </div>
 
         </div>
 
         <div class="bento-bottom">
           <div class="bento-card bento-tagline">
-            <span class="bento-tagline__title">Весь рацион —<br>как на ладони</span>
-            <span class="bento-tagline__sub">КБЖУ, динамика,<br>цели по калориям</span>
+            <span class="bento-tagline__title">Следи за прогрессом с помощью аналитики</span>
           </div>
           <div class="bento-card bento-food">
             <img src="photo/1.jpeg" alt="">
