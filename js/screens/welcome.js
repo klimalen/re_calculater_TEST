@@ -31,62 +31,46 @@ export function renderWelcome() {
       </div>
 
       <div class="bento-wrap">
-        <p class="bento-wrap__label">Возможности</p>
         <div class="bento-grid">
 
-          <div class="bc bc-how">
-            <div class="bc-how__top">
-              <span class="bc-how__badge">✦ AI-распознавание</span>
-              <p class="bc-how__headline">Сфотографируй —<br>и КБЖУ готов</p>
-              <p class="bc-how__sub">Опиши или сними блюдо,<br>AI посчитает всё сам</p>
-            </div>
-            <div class="bc-how__pills">
-              <span class="bc-pill">📷 По фото</span>
-              <span class="bc-pill">✏️ Текстом</span>
-            </div>
+          <div class="bento-card bento-hero">
+            <p class="bento-hero__title">Следить за калориями еще никогда не было так просто!</p>
+            <p class="bento-hero__sub">Сфотографируй или опиши еду — приложение само рассчитает КБЖУ</p>
           </div>
 
-          <div class="bc bc-s1 bc-screen">
+          <div class="bento-card bento-screen bento-screen--sm">
+            <img src="screens/2.png" alt="">
+          </div>
+          <div class="bento-card bento-screen bento-screen--tall">
             <img src="screens/1.png" alt="">
           </div>
 
-          <div class="bc bc-f1 bc-photo">
-            <img src="photo/3.jpeg" alt="">
+          <div class="bento-card bento-free">
+            <span class="bento-free__price">0 ₽</span>
+            <span class="bento-free__label">Сервис абсолютно бесплатен</span>
           </div>
 
-          <div class="bc bc-fw1 bc-photo">
-            <img src="photo/photo_2026-04-08 12.20.43.jpeg" alt="">
-          </div>
-
-          <div class="bc bc-free">
-            <p class="bc-free__num">0 ₽</p>
-            <p class="bc-free__label">Бесплатно</p>
-          </div>
-
-          <div class="bc bc-s2 bc-screen">
-            <img src="screens/2.png" alt="">
-          </div>
-
-          <div class="bc bc-s5 bc-screen">
+          <div class="bento-card bento-screen bento-screen--stats">
             <img src="screens/5.png" alt="">
           </div>
-
-          <div class="bc bc-day">
-            <p class="bc-day__headline">Весь рацион —<br>как на ладони</p>
-            <p class="bc-day__sub">КБЖУ, динамика,<br>цели по калориям</p>
-          </div>
-
-          <div class="bc bc-f2 bc-photo">
-            <img src="photo/5.jpeg" alt="">
-          </div>
-
-          <div class="bc bc-fw2 bc-photo">
-            <img src="photo/photo_2026-04-08 12.20.57.jpeg" alt="">
+          <div class="bento-card bento-analytics">
+            <span class="bento-analytics__text">Следи за прогрессом с помощью аналитики</span>
           </div>
 
         </div>
 
-        <button class="bento-cta-btn js-register">Начать сейчас →</button>
+        <div class="bento-bottom">
+          <div class="bento-card bento-tagline">
+            <span class="bento-tagline__title">Весь рацион —<br>как на ладони</span>
+            <span class="bento-tagline__sub">КБЖУ, динамика,<br>цели по калориям</span>
+          </div>
+          <div class="bento-card bento-food">
+            <img src="photo/1.jpeg" alt="">
+          </div>
+          <button class="bento-card bento-cta js-register">
+            Начать →
+          </button>
+        </div>
       </div>
 
     </div>
