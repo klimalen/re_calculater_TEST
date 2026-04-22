@@ -1,193 +1,20 @@
-/* ── Bento Welcome Screen ────────────────────────────── */
-
-.welcome-bento {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  background: var(--bg-secondary);
-  display: flex;
-  flex-direction: column;
-}
-
-.bento-grid {
-  padding: 12px 12px 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.bento-card {
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  position: relative;
-}
-
-.bento-hero {
-  grid-column: 1 / -1;
-  background: #1e1810;
-  padding: 24px 22px 22px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.bento-hero__title {
-  font-size: 21px;
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: -0.04em;
-  color: #ffffff;
-}
-
-.bento-hero__sub {
-  font-size: 13px;
-  line-height: 1.45;
-  color: rgba(255,255,255,0.65);
-}
-
-.bento-screen {
-  background: var(--bg-card);
-}
-
-.bento-screen--sm    { height: 200px; }
-.bento-screen--tall  { grid-row: span 2; }
-.bento-screen--stats { height: 200px; }
-
-.bento-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  display: block;
-  user-select: none;
-  -webkit-user-drag: none;
-  pointer-events: none;
-}
-
-.bento-img--center { object-position: center center; }
-
-.bento-free {
-  background: #bcc285;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 14px 16px;
-  height: 160px;
-}
-
-.bento-free__price {
-  display: block;
-  font-size: 52px;
-  font-weight: 800;
-  letter-spacing: -0.06em;
-  line-height: 1;
-  color: #1e1810;
-  margin-bottom: 6px;
-}
-
-.bento-free__label {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.35;
-  color: #2a3210;
-}
-
-.bento-analytics {
-  background: #f0c87c;
-  display: flex;
-  align-items: flex-end;
-  padding: 16px;
-  height: 200px;
-}
-
-.bento-analytics__text {
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.3;
-  color: #1e1810;
-}
-
-.bento-bottom {
-  padding: 8px 12px 0;
-  display: grid;
-  grid-template-columns: 1.3fr 1fr 1fr;
-  gap: 8px;
-  height: 130px;
-}
-
-.bento-tagline {
-  background: #1e1810;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 14px;
-  gap: 5px;
-}
-
-.bento-tagline__title {
-  display: block;
-  font-size: 13px;
-  font-weight: 800;
-  line-height: 1.25;
-  color: #ffffff;
-}
-
-.bento-tagline__sub {
-  display: block;
-  font-size: 10px;
-  line-height: 1.4;
-  color: rgba(255,255,255,0.55);
-}
-
-.bento-food { background: var(--bg-card); }
-
-.bento-cta {
-  background: #1e1810;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 0 8px;
-  transition: background var(--tr), transform var(--tr);
-  -webkit-tap-highlight-color: transparent;
-}
-
-.bento-cta:active {
-  transform: scale(0.97);
-  background: #2e2618;
-}
-
-.bento-footer {
-  padding: 12px;
-  padding-bottom: max(20px, env(safe-area-inset-bottom));
-  text-align: center;
-}
-
-.bento-login {
-  font-size: 14px;
-  color: var(--text-secondary);
-  padding: 10px;
-  transition: opacity var(--tr);
-  -webkit-tap-highlight-color: transparent;
-}
-
-.bento-login:hover { opacity: 0.65; }
-.bento-login strong { color: var(--text); }
-
 /* ── Welcome / Auth ──────────────────────────────────── */
 
 .welcome {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--bg-secondary);
+}
+
+.welcome__first-view {
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
-  background: var(--bg-secondary);
+  flex-shrink: 0;
 }
 
 /* Fixed-height hero — does NOT grow on tall screens */
@@ -316,6 +143,194 @@
 .welcome__features  { display: none; }
 .welcome__hero      { display: none; }
 .welcome__logo      { display: none; }
+
+/* ── Bento section (below welcome) ──────────────────── */
+
+.bento-wrap {
+  padding: 0 18px max(44px, env(safe-area-inset-bottom));
+}
+
+.bento-wrap__label {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-placeholder);
+  padding: 20px 0 16px;
+}
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.bc {
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Grid placement */
+.bc-how  { grid-column: 1; grid-row: 1 / 3; }
+.bc-s1   { grid-column: 2; grid-row: 1; min-height: 136px; }
+.bc-f1   { grid-column: 2; grid-row: 2; min-height: 126px; }
+.bc-fw1  { grid-column: 1 / -1; grid-row: 3; min-height: 152px; }
+.bc-free { grid-column: 1; grid-row: 4; min-height: 124px; }
+.bc-s2   { grid-column: 2; grid-row: 4; min-height: 124px; }
+.bc-s5   { grid-column: 1; grid-row: 5 / 7; }
+.bc-day  { grid-column: 2; grid-row: 5; min-height: 126px; }
+.bc-f2   { grid-column: 2; grid-row: 6; min-height: 150px; }
+.bc-fw2  { grid-column: 1 / -1; grid-row: 7; min-height: 144px; }
+
+/* Image cards */
+.bc-screen img,
+.bc-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.bc-screen img { object-position: top center; }
+.bc-photo img  { object-position: center; }
+
+/* Dark card: how to add food */
+.bc-how {
+  background: linear-gradient(160deg, #26211a 0%, #161009 100%);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.bc-how__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(93,122,56,0.22);
+  border: 1px solid rgba(120,160,60,0.35);
+  border-radius: var(--radius-full);
+  padding: 4px 11px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #a8c570;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: block;
+}
+
+.bc-how__headline {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #fff;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+
+.bc-how__sub {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.45;
+}
+
+.bc-how__pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.bc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+}
+
+/* Cream card: free */
+.bc-free {
+  background: #ede3cc;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.bc-free__num {
+  font-size: 46px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: -0.04em;
+}
+
+.bc-free__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-top: 5px;
+}
+
+/* Light-green card: ration */
+.bc-day {
+  background: linear-gradient(135deg, #ecf4e0 0%, #deeacb 100%);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.bc-day__headline {
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.bc-day__sub {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--accent-text);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* CTA button at bottom of bento */
+.bento-cta-btn {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  background: #1e1810;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 700;
+  font-family: inherit;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(30,24,16,0.28);
+  transition: transform var(--tr), box-shadow var(--tr);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bento-cta-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 4px 12px rgba(30,24,16,0.22);
+}
 
 /* ── Auth screen ─────────────────────────────────────── */
 
