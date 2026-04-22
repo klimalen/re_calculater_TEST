@@ -155,12 +155,9 @@ export async function renderAiResult() {
       _tipsTimers.push(t);
     }
 
-    const firstTimer = setTimeout(() => {
-      showNext();
-      const interval = setInterval(showNext, 4500);
-      _tipsTimers.push(interval);
-    }, 3000);
-    _tipsTimers.push(firstTimer);
+    showNext();
+    const interval = setInterval(showNext, 3000);
+    _tipsTimers.push(interval);
   }
 
   // ── Render: no food found ────────────────────────────
