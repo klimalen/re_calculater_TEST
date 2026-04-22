@@ -55,7 +55,7 @@ export function renderWelcome() {
           </div>
           <div class="bento-card bento-analytics">
             <span class="bento-analytics__title">Весь рацион —<br>как на ладони</span>
-            <span class="bento-analytics__sub">КБЖУ, динамика, цели по калориям</span>
+            <span class="bento-analytics__sub">КБЖУ, динамика,<br>цели по калориям</span>
           </div>
 
         </div>
