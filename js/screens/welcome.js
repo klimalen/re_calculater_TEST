@@ -60,14 +60,7 @@ export function renderWelcome() {
 
         </div>
 
-        <div class="bento-bottom">
-          <div class="bento-card bento-tagline">
-            <span class="bento-tagline__title">Следи<br>за прогрессом<br>с помощью<br>аналитики</span>
-          </div>
-          <button class="bento-card bento-cta js-register">
-            Начать →
-          </button>
-        </div>
+        <button class="bento-start-btn js-register">Начать →</button>
       </div>
 
     </div>
