@@ -30,7 +30,7 @@ export function renderWelcome() {
         </div>
       </div>
 
-      <div class="bento-wrap">
+      <div class="bento-wrap" hidden>
         <div class="bento-grid">
 
           <div class="bento-card bento-hero">
