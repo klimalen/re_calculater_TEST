@@ -27,6 +27,7 @@ export function renderWelcome() {
             <button class="btn btn--primary btn--full js-register">Начать сейчас</button>
             <button class="welcome__login-link js-login">Войти</button>
           </div>
+          <p class="welcome__disclaimer">Сервис бесплатен. Для ведения дневника питания и хранения данных необходима регистрация.</p>
         </div>
       </div>
 
